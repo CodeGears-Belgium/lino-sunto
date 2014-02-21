@@ -34,3 +34,12 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Mac Files
+.DS_Store
+
+# Database
+default.db
+
+# Media Files
+media
