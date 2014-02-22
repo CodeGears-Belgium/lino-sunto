@@ -7,6 +7,7 @@ class Site(Site):
             yield super(Site, self).get_installed_apps()
             yield 'lino_sunto.products'
             yield 'lino_sunto.support'
+            #yield 'lino.modlib.system'
 
 SITE = Site(globals())
 SECRET_KEY = '4tnn118570xptxmd33_v=v)k&(3z(j5$r&pa1*ei1$pqj6hqc!'

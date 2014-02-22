@@ -13,9 +13,9 @@
  along with Lino; if not, see <http://www.gnu.org/licenses/>.
 */
 
-// lino.js --- generated Thu Feb 20 08:22:18 2014 by Lino version 1.6.13.
+// lino.js --- generated Sat Feb 22 08:35:12 2014 by Lino version 1.6.13.
 Ext.BLANK_IMAGE_URL = 'http://extjs-public.googlecode.com/svn/tags/extjs-3.3.1/release/resources/images/default/s.gif';
-LANGUAGE_CHOICES = [  ];
+LANGUAGE_CHOICES = [ [ "en-us", "American English" ] ];
 MEDIA_URL = "/media";
 
 // hack to add a toCamel function, inspired by
@@ -5118,10 +5118,12 @@ Ext.namespace('Lino.products.Manufacturers')
 Ext.namespace('Lino.products.Products')
 Ext.namespace('Lino.products.ProductSpecs')
 Ext.namespace('Lino.products.ProductOptions')
-Ext.namespace('Lino.products.OptionsByProduct')
-Ext.namespace('Lino.products.SpecsByProduct')
+Ext.namespace('Lino.products.ProductImages')
 Ext.namespace('Lino.support.Customers')
 Ext.namespace('Lino.support.Support_Items')
+Ext.namespace('Lino.products.SpecsByProduct')
+Ext.namespace('Lino.products.OptionsByProduct')
+Ext.namespace('Lino.products.ImagesByProduct')
 Ext.namespace('Lino.about.Models')
 Ext.namespace('Lino.about.FieldsByModel')
 Ext.namespace('Lino.about.Inspector')
@@ -5148,21 +5150,26 @@ Lino.products.Products.DetailFormPanel = Ext.extend(Lino.FormPanel,{
   auto_save: true,
   initComponent : function() {
     var containing_panel = this;
-    var manufacturer1 = new Lino.RemoteComboFieldElement({ "autoHeight": true, "fieldLabel": "Manufacturer", "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer...", "selectOnFocus": true, "hiddenName": "manufacturerHidden", "anchor": "-20", "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "name": "manufacturer" });
-    var name2 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "name", "name": "name", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var main_1_panel3 = new Ext.Panel({ "autoScroll": false, "autoHeight": true, "border": false, "layout": "hbox", "labelWidth": 117, "hideCheckBoxLabels": true, "items": [ { "flex": 48, "autoHeight": true, "layout": "form", "xtype": "panel", "items": manufacturer1, "labelAlign": "top" }, { "flex": 51, "autoHeight": true, "layout": "form", "xtype": "panel", "items": name2, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "labelAlign": "top" });
-    var model_number6 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "model number", "name": "model_number", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var line7 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "line", "name": "line", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var production_begin8 = new Lino.DateField({ "autoHeight": true, "fieldLabel": "production begin", "name": "production_begin", "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var supported9 = new Ext.form.Checkbox({ "boxLabel": "supported", "autoHeight": true, "hideLabel": true, "checked": true, "name": "supported", "selectOnFocus": true, "anchor": "-20" });
-    var main_2_panel10 = new Ext.Panel({ "autoScroll": false, "autoHeight": true, "border": false, "layout": "hbox", "labelWidth": 153, "hideCheckBoxLabels": true, "items": [ { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": model_number6, "labelAlign": "top" }, { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": line7, "labelAlign": "top" }, { "flex": 20, "autoHeight": true, "layout": "form", "xtype": "panel", "items": production_begin8, "labelAlign": "top" }, { "flex": 15, "autoHeight": true, "layout": "form", "xtype": "panel", "items": supported9, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "labelAlign": "top" });
-    var SpecsByProduct_grid20 = new Lino.products.SpecsByProduct.GridPanel({ "flex": 41, "hide_top_toolbar": true, "containing_panel": this, "tools": [ Lino.show_in_own_window_button(Lino.products.SpecsByProduct.grid) ], "preview_limit": 15, "master_panel": this });
-    var OptionsByProduct_grid26 = new Lino.products.OptionsByProduct.GridPanel({ "flex": 41, "hide_top_toolbar": true, "containing_panel": this, "tools": [ Lino.show_in_own_window_button(Lino.products.OptionsByProduct.grid) ], "preview_limit": 15, "master_panel": this });
-    var main_panel27 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "vbox", "hideCheckBoxLabels": true, "items": [ main_1_panel3, main_2_panel10, SpecsByProduct_grid20, OptionsByProduct_grid26 ], "frame": true, "layoutConfig": { "align": "stretch" }, "bodyBorder": false, "labelAlign": "top" });
-    this.items = main_panel27;
+    var product_image_htmlbox10 = new Lino.HtmlBoxPanel({ "flex": 20, "layout": "fit", "name": "product_image", "containing_panel": this, "items": new Ext.BoxComponent({autoScroll:true}), "value": "<br/>", "always_enabled": true, "bodyStyle": "overflow-x:hidden;" });
+    var prodtype11 = new Lino.ChoicesFieldElement({ "autoHeight": true, "fieldLabel": "Product Type", "allowBlank": false, "value": "pc", "hiddenName": "prodtypeHidden", "selectOnFocus": true, "anchor": "-20", "store": [ [ "pc", "Computer" ], [ "care", "Service Care" ], [ "periph", "Peripherals" ], [ "storage", "Storage" ], [ "comp", "Components" ], [ "network", "Networking" ], [ "software", "Software" ], [ "communication", "Communication" ] ], "name": "prodtype" });
+    var manufacturer12 = new Lino.RemoteComboFieldElement({ "autoHeight": true, "fieldLabel": "Manufacturer", "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer...", "selectOnFocus": true, "hiddenName": "manufacturerHidden", "anchor": "-20", "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "name": "manufacturer" });
+    var name13 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Name", "name": "name", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var spec_box_1_panel14 = new Ext.Panel({ "autoHeight": true, "layout": "hbox", "items": [ { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": prodtype11, "labelAlign": "top" }, { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": manufacturer12, "labelAlign": "top" }, { "flex": 34, "autoHeight": true, "layout": "form", "xtype": "panel", "items": name13, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "hideCheckBoxLabels": true, "autoScroll": false, "labelWidth": 117, "border": false, "anchor": "-20", "labelAlign": "top" });
+    var model_number18 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Model Number", "name": "model_number", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var line19 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Product Line", "name": "line", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var production_begin20 = new Lino.DateField({ "autoHeight": true, "fieldLabel": "Production begin / Release", "name": "production_begin", "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var supported21 = new Ext.form.Checkbox({ "boxLabel": "Still supported by manufacturer", "autoHeight": true, "hideLabel": true, "checked": true, "name": "supported", "selectOnFocus": true, "anchor": "-20" });
+    var spec_box_2_panel22 = new Ext.Panel({ "autoHeight": true, "layout": "hbox", "items": [ { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": model_number18, "labelAlign": "top" }, { "flex": 32, "autoHeight": true, "layout": "form", "xtype": "panel", "items": line19, "labelAlign": "top" }, { "flex": 20, "autoHeight": true, "layout": "form", "xtype": "panel", "items": production_begin20, "labelAlign": "top" }, { "flex": 15, "autoHeight": true, "layout": "form", "xtype": "panel", "items": supported21, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "hideCheckBoxLabels": true, "autoScroll": false, "labelWidth": 288, "border": false, "anchor": "-20", "labelAlign": "top" });
+    var spec_box_panel27 = new Ext.Panel({ "flex": 80, "autoHeight": true, "border": false, "layout": "form", "hideCheckBoxLabels": true, "items": [ spec_box_1_panel14, spec_box_2_panel22 ], "frame": true, "autoScroll": false, "bodyBorder": false, "labelAlign": "top" });
+    var main_1_panel28 = new Ext.Panel({ "autoHeight": true, "layout": "hbox", "items": [ product_image_htmlbox10, spec_box_panel27 ], "region": "north", "layoutConfig": { "align": "stretchmax" }, "hideCheckBoxLabels": true, "split": true, "autoScroll": false, "labelWidth": 0, "border": false, "frame": false, "labelAlign": "top" });
+    var SpecsByProduct_grid35 = new Lino.products.SpecsByProduct.GridPanel({ "flex": 5, "hide_top_toolbar": true, "containing_panel": this, "region": "center", "preview_limit": 0, "master_panel": this, "split": true, "tools": [ Lino.show_in_own_window_button(Lino.products.SpecsByProduct.grid) ] });
+    var OptionsByProduct_grid42 = new Lino.products.OptionsByProduct.GridPanel({ "flex": 5, "hide_top_toolbar": true, "containing_panel": this, "region": "south", "preview_limit": 0, "master_panel": this, "split": true, "tools": [ Lino.show_in_own_window_button(Lino.products.OptionsByProduct.grid) ] });
+    var main_panel43 = new Lino.VBorderPanel({ "autoScroll": false, "border": false, "hideCheckBoxLabels": true, "items": [ main_1_panel28, SpecsByProduct_grid35, OptionsByProduct_grid42 ], "frame": true, "bodyBorder": false, "labelAlign": "top" });
+    this.items = main_panel43;
     this.before_row_edit = function(record) {
-      SpecsByProduct_grid20.on_master_changed();
-      OptionsByProduct_grid26.on_master_changed();
+      product_image_htmlbox10.refresh();
+      SpecsByProduct_grid35.on_master_changed();
+      OptionsByProduct_grid42.on_master_changed();
     }
     Lino.products.Products.DetailFormPanel.superclass.initComponent.call(this);
   }
@@ -5175,11 +5182,11 @@ Lino.lino.Report.DetailFormPanel = Ext.extend(Lino.FormPanel,{
   disable_editing: true,
   initComponent : function() {
     var containing_panel = this;
-    var body_htmlbox56 = new Lino.HtmlBoxPanel({ "bodyStyle": "overflow-x:hidden;", "layout": "fit", "name": "body", "containing_panel": this, "items": new Ext.BoxComponent({autoScroll:true}), "value": "<br/>", "always_enabled": true });
-    var main_panel57 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "fit", "labelWidth": 0, "hideCheckBoxLabels": true, "items": [ body_htmlbox56 ], "frame": true, "bodyBorder": false, "labelAlign": "top" });
-    this.items = main_panel57;
+    var body_htmlbox75 = new Lino.HtmlBoxPanel({ "bodyStyle": "overflow-x:hidden;", "layout": "fit", "name": "body", "containing_panel": this, "items": new Ext.BoxComponent({autoScroll:true}), "value": "<br/>", "always_enabled": true });
+    var main_panel76 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "fit", "labelWidth": 0, "hideCheckBoxLabels": true, "items": [ body_htmlbox75 ], "frame": true, "bodyBorder": false, "labelAlign": "top" });
+    this.items = main_panel76;
     this.before_row_edit = function(record) {
-      body_htmlbox56.refresh();
+      body_htmlbox75.refresh();
     }
     Lino.lino.Report.DetailFormPanel.superclass.initComponent.call(this);
   }
@@ -5192,9 +5199,9 @@ Lino.about.About.DetailFormPanel = Ext.extend(Lino.FormPanel,{
   disable_editing: true,
   initComponent : function() {
     var containing_panel = this;
-    var server_status_disp59 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "Server status", "name": "server_status", "anchor": "-20", "value": "<br/>", "always_enabled": true });
-    var main_panel60 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "vbox", "labelWidth": 126, "hideCheckBoxLabels": true, "items": [ { "flex": 25, "html": "<div class=\"htmlText\"><span><a href=\"http://www.lino-framework.org\" target=\"_blank\">Lino</a> 1.6.13, <a href=\"http://north.lino-framework.org\" target=\"_blank\">North</a> 0.1.7, <a href=\"http://site.lino-framework.org\" target=\"_blank\">djangosite</a> 0.1.8, <a href=\"http://www.djangoproject.com\" target=\"_blank\">Django</a> 1.6.2, <a href=\"http://www.python.org/\" target=\"_blank\">Python</a> 2.7.5, <a href=\"http://babel.edgewall.org/\" target=\"_blank\">Babel</a> 1.3, <a href=\"http://jinja.pocoo.org/\" target=\"_blank\">Jinja</a> 2.7.2, <a href=\"http://sphinx-doc.org/\" target=\"_blank\">Sphinx</a> 1.2.1, <a href=\"http://labix.org/python-dateutil\" target=\"_blank\">python-dateutil</a> 1.5, <a href=\"http://pypi.python.org/pypi/odfpy\" target=\"_blank\">OdfPy</a> ODFPY/0.9.6, <a href=\"http://docutils.sourceforge.net/\" target=\"_blank\">docutils</a> 0.11, <a href=\"https://fedorahosted.org/suds/\" target=\"_blank\">suds</a> (not installed), <a href=\"http://pyyaml.org/\" target=\"_blank\">PyYaml</a> 3.10, <a href=\"http://appyframework.org/pod.html\" target=\"_blank\">Appy</a> 0.8.5 (2013/08/12 09:51), <a href=\"http://www.sencha.com\" target=\"_blank\">ExtJS</a> <a href=\"#\" onclick=\"alert('ExtJS client version is ' + Ext.version);\" title=\"Click to see ExtJS client version\">(version)</a>, <a href=\"http://www.famfamfam.com/lab/icons/silk/\" target=\"_blank\">Silk Icons</a> 1.3, <a href=\"https://github.com/twbs/bootstrap\" target=\"_blank\">Bootstrap</a> 2.3.1?</span><p>Server uptime : <b>Thursday, February 20, 2014 at 07:45:05.307967</b></p><p>Source timestamps:</p><ul><li>lino : <b>Thursday, February 20, 2014 at 02:30:16</b></li><li>django : <b>Wednesday, February 19, 2014 at 14:14:32</b></li><li>north : <b>Wednesday, February 19, 2014 at 14:11:03</b></li><li>djangosite : <b>Wednesday, February 19, 2014 at 14:10:46</b></li><li>atelier : <b>Wednesday, February 19, 2014 at 14:10:26</b></li></ul></div>", "xtype": "label" }, { "items": server_status_disp59, "autoHeight": true, "layout": "form", "xtype": "panel", "labelAlign": "top" } ], "frame": true, "layoutConfig": { "align": "stretch" }, "bodyBorder": false, "labelAlign": "top" });
-    this.items = main_panel60;
+    var server_status_disp78 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "Server status", "name": "server_status", "anchor": "-20", "value": "<br/>", "always_enabled": true });
+    var main_panel79 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "vbox", "labelWidth": 126, "hideCheckBoxLabels": true, "items": [ { "flex": 25, "html": "<div class=\"htmlText\"><span><a href=\"http://www.lino-framework.org\" target=\"_blank\">Lino</a> 1.6.13, <a href=\"http://north.lino-framework.org\" target=\"_blank\">North</a> 0.1.7, <a href=\"http://site.lino-framework.org\" target=\"_blank\">djangosite</a> 0.1.8, <a href=\"http://www.djangoproject.com\" target=\"_blank\">Django</a> 1.6.2, <a href=\"http://www.python.org/\" target=\"_blank\">Python</a> 2.7.5, <a href=\"http://babel.edgewall.org/\" target=\"_blank\">Babel</a> 1.3, <a href=\"http://jinja.pocoo.org/\" target=\"_blank\">Jinja</a> 2.7.2, <a href=\"http://sphinx-doc.org/\" target=\"_blank\">Sphinx</a> 1.2.1, <a href=\"http://labix.org/python-dateutil\" target=\"_blank\">python-dateutil</a> 1.5, <a href=\"http://pypi.python.org/pypi/odfpy\" target=\"_blank\">OdfPy</a> ODFPY/0.9.6, <a href=\"http://docutils.sourceforge.net/\" target=\"_blank\">docutils</a> 0.11, <a href=\"https://fedorahosted.org/suds/\" target=\"_blank\">suds</a> (not installed), <a href=\"http://pyyaml.org/\" target=\"_blank\">PyYaml</a> 3.10, <a href=\"http://appyframework.org/pod.html\" target=\"_blank\">Appy</a> 0.8.5 (2013/08/12 09:51), <a href=\"http://www.sencha.com\" target=\"_blank\">ExtJS</a> <a href=\"#\" onclick=\"alert('ExtJS client version is ' + Ext.version);\" title=\"Click to see ExtJS client version\">(version)</a>, <a href=\"http://www.famfamfam.com/lab/icons/silk/\" target=\"_blank\">Silk Icons</a> 1.3, <a href=\"https://github.com/twbs/bootstrap\" target=\"_blank\">Bootstrap</a> 2.3.1?</span><p>Server uptime : <b>Saturday, February 22, 2014 at 08:35:10.169104</b></p><p>Source timestamps:</p><ul><li>lino : <b>Friday, February 21, 2014 at 01:17:43</b></li><li>north : <b>Friday, February 21, 2014 at 01:17:22</b></li><li>django : <b>Wednesday, February 19, 2014 at 14:14:32</b></li><li>djangosite : <b>Wednesday, February 19, 2014 at 14:10:46</b></li><li>atelier : <b>Wednesday, February 19, 2014 at 14:10:26</b></li></ul></div>", "xtype": "label" }, { "items": server_status_disp78, "autoHeight": true, "layout": "form", "xtype": "panel", "labelAlign": "top" } ], "frame": true, "layoutConfig": { "align": "stretch" }, "bodyBorder": false, "labelAlign": "top" });
+    this.items = main_panel79;
     this.before_row_edit = function(record) {
     }
     Lino.about.About.DetailFormPanel.superclass.initComponent.call(this);
@@ -5208,14 +5215,16 @@ Lino.products.Products.InsertFormPanel = Ext.extend(Lino.FormPanel,{
   autoHeight: true,
   initComponent : function() {
     var containing_panel = this;
-    var manufacturer28 = new Lino.RemoteComboFieldElement({ "autoHeight": true, "fieldLabel": "Manufacturer", "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer...", "selectOnFocus": true, "hiddenName": "manufacturerHidden", "anchor": "-20", "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "name": "manufacturer" });
-    var name29 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "name", "name": "name", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var model_number30 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "model number", "name": "model_number", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var line31 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "line", "name": "line", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var production_begin32 = new Lino.DateField({ "autoHeight": true, "fieldLabel": "production begin", "name": "production_begin", "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
-    var supported33 = new Ext.form.Checkbox({ "boxLabel": "supported", "autoHeight": true, "hideLabel": true, "checked": true, "name": "supported", "selectOnFocus": true, "anchor": "-20" });
-    var main_panel34 = new Ext.Panel({ "hideCheckBoxLabels": true, "autoHeight": true, "border": false, "layout": "form", "labelWidth": 153, "autoScroll": false, "items": [ { "autoHeight": true, "layout": "form", "xtype": "panel", "items": manufacturer28, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": name29, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": model_number30, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": line31, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": production_begin32, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": supported33, "anchor": "-20", "labelAlign": "top" } ], "frame": true, "bodyBorder": false, "labelAlign": "top" });
-    this.items = main_panel34;
+    var prodtype44 = new Lino.ChoicesFieldElement({ "autoHeight": true, "fieldLabel": "Product Type", "allowBlank": false, "value": "pc", "hiddenName": "prodtypeHidden", "selectOnFocus": true, "anchor": "-20", "store": [ [ "pc", "Computer" ], [ "care", "Service Care" ], [ "periph", "Peripherals" ], [ "storage", "Storage" ], [ "comp", "Components" ], [ "network", "Networking" ], [ "software", "Software" ], [ "communication", "Communication" ] ], "name": "prodtype" });
+    var manufacturer45 = new Lino.RemoteComboFieldElement({ "autoHeight": true, "fieldLabel": "Manufacturer", "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer...", "selectOnFocus": true, "hiddenName": "manufacturerHidden", "anchor": "-20", "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "name": "manufacturer" });
+    var main_1_panel46 = new Ext.Panel({ "autoHeight": true, "layout": "hbox", "items": [ { "flex": 50, "autoHeight": true, "layout": "form", "xtype": "panel", "items": prodtype44, "labelAlign": "top" }, { "flex": 50, "autoHeight": true, "layout": "form", "xtype": "panel", "items": manufacturer45, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "hideCheckBoxLabels": true, "autoScroll": false, "labelWidth": 117, "border": false, "anchor": "-20", "labelAlign": "top" });
+    var name49 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Name", "name": "name", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var model_number50 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Model Number", "name": "model_number", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var line51 = new Ext.form.TextField({ "autoHeight": true, "fieldLabel": "Product Line", "name": "line", "maxLength": 200, "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var production_begin52 = new Lino.DateField({ "autoHeight": true, "fieldLabel": "Production begin / Release", "name": "production_begin", "selectOnFocus": true, "anchor": "-20", "allowBlank": false });
+    var supported53 = new Ext.form.Checkbox({ "boxLabel": "Still supported by manufacturer", "autoHeight": true, "hideLabel": true, "checked": true, "name": "supported", "selectOnFocus": true, "anchor": "-20" });
+    var main_panel54 = new Ext.Panel({ "hideCheckBoxLabels": true, "autoHeight": true, "border": false, "layout": "form", "labelWidth": 288, "autoScroll": false, "items": [ main_1_panel46, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": name49, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": model_number50, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": line51, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": production_begin52, "anchor": "-20", "labelAlign": "top" }, { "autoHeight": true, "layout": "form", "xtype": "panel", "items": supported53, "anchor": "-20", "labelAlign": "top" } ], "frame": true, "bodyBorder": false, "labelAlign": "top" });
+    this.items = main_panel54;
     this.before_row_edit = function(record) {
     }
     Lino.products.Products.InsertFormPanel.superclass.initComponent.call(this);
@@ -5229,16 +5238,16 @@ Lino.about.Models.DetailFormPanel = Ext.extend(Lino.FormPanel,{
   disable_editing: true,
   initComponent : function() {
     var containing_panel = this;
-    var app_disp41 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "app_label", "name": "app", "anchor": "-20", "value": "<br/>", "always_enabled": true });
-    var name_disp42 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "name", "name": "name", "anchor": "-20", "value": "<br/>", "always_enabled": true });
-    var docstring_disp43 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "docstring", "name": "docstring", "anchor": "-20", "value": "<br/>", "always_enabled": true });
-    var rows44 = new Ext.form.NumberField({ "disabled": true, "autoHeight": true, "fieldLabel": "Rows", "anchor": "-20", "name": "rows" });
-    var main_1_panel45 = new Ext.Panel({ "autoScroll": false, "autoHeight": true, "border": false, "layout": "hbox", "labelWidth": 90, "hideCheckBoxLabels": true, "items": [ { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": app_disp41, "labelAlign": "top" }, { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": name_disp42, "labelAlign": "top" }, { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": docstring_disp43, "labelAlign": "top" }, { "flex": 5, "autoHeight": true, "layout": "form", "xtype": "panel", "items": rows44, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "labelAlign": "top" });
-    var about_FieldsByModel_grid54 = new Lino.about.FieldsByModel.GridPanel({ "flex": 62, "hide_top_toolbar": true, "containing_panel": this, "tools": [ Lino.show_in_own_window_button(Lino.about.FieldsByModel.grid) ], "preview_limit": 15, "master_panel": this });
-    var main_panel55 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "vbox", "hideCheckBoxLabels": true, "items": [ main_1_panel45, about_FieldsByModel_grid54 ], "frame": true, "layoutConfig": { "align": "stretch" }, "bodyBorder": false, "labelAlign": "top" });
-    this.items = main_panel55;
+    var app_disp60 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "app_label", "name": "app", "anchor": "-20", "value": "<br/>", "always_enabled": true });
+    var name_disp61 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "name", "name": "name", "anchor": "-20", "value": "<br/>", "always_enabled": true });
+    var docstring_disp62 = new Ext.form.DisplayField({ "disabled": true, "autoHeight": true, "fieldLabel": "docstring", "name": "docstring", "anchor": "-20", "value": "<br/>", "always_enabled": true });
+    var rows63 = new Ext.form.NumberField({ "disabled": true, "autoHeight": true, "fieldLabel": "Rows", "anchor": "-20", "name": "rows" });
+    var main_1_panel64 = new Ext.Panel({ "autoScroll": false, "autoHeight": true, "border": false, "layout": "hbox", "labelWidth": 90, "hideCheckBoxLabels": true, "items": [ { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": app_disp60, "labelAlign": "top" }, { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": name_disp61, "labelAlign": "top" }, { "flex": 31, "autoHeight": true, "layout": "form", "xtype": "panel", "items": docstring_disp62, "labelAlign": "top" }, { "flex": 5, "autoHeight": true, "layout": "form", "xtype": "panel", "items": rows63, "labelAlign": "top" } ], "frame": false, "layoutConfig": { "align": "stretchmax" }, "labelAlign": "top" });
+    var about_FieldsByModel_grid73 = new Lino.about.FieldsByModel.GridPanel({ "flex": 62, "hide_top_toolbar": true, "containing_panel": this, "tools": [ Lino.show_in_own_window_button(Lino.about.FieldsByModel.grid) ], "preview_limit": 15, "master_panel": this });
+    var main_panel74 = new Ext.Panel({ "autoScroll": false, "border": false, "layout": "vbox", "hideCheckBoxLabels": true, "items": [ main_1_panel64, about_FieldsByModel_grid73 ], "frame": true, "layoutConfig": { "align": "stretch" }, "bodyBorder": false, "labelAlign": "top" });
+    this.items = main_panel74;
     this.before_row_edit = function(record) {
-      about_FieldsByModel_grid54.on_master_changed();
+      about_FieldsByModel_grid73.on_master_changed();
     }
     Lino.about.Models.DetailFormPanel.superclass.initComponent.call(this);
   }
@@ -5262,11 +5271,11 @@ Lino.products.Vendors.GridPanel = Ext.extend(Lino.GridPanel,{
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var name62 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id63 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var name81 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id82 = new Ext.form.NumberField({ "selectOnFocus": true });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name62 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id63, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name81 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id82, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
     Lino.products.Vendors.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5307,11 +5316,11 @@ Lino.products.Manufacturers.GridPanel = Ext.extend(Lino.GridPanel,{
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var name65 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id66 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var name84 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id85 = new Ext.form.NumberField({ "selectOnFocus": true });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name65 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id66, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name84 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id85, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
     Lino.products.Manufacturers.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5344,9 +5353,9 @@ Lino.products.Products.GridPanel = Ext.extend(Lino.GridPanel,{
   title : "Products",
   gc_name : 0,
   stripeRows : true,
-  disabled_actions_index : 9,
-  ls_store_fields : [ { "name": "manufacturer" }, 'manufacturerHidden', { "name": "name" }, { "type": "int", "name": "id" }, { "name": "model_number" }, { "name": "line" }, { "type": "date", "name": "production_begin", "dateFormat": "d.m.Y" }, { "type": "boolean", "name": "supported" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
-  pk_index : 3,
+  disabled_actions_index : 11,
+  ls_store_fields : [ { "name": "manufacturer" }, 'manufacturerHidden', { "name": "name" }, { "name": "line" }, { "type": "int", "name": "id" }, { "name": "prodtype" }, 'prodtypeHidden', { "name": "model_number" }, { "type": "date", "name": "production_begin", "dateFormat": "d.m.Y" }, { "type": "boolean", "name": "supported" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  pk_index : 4,
   ls_grid_configs : [  ],
   ls_id_property : "id",
   page_length : 20,
@@ -5354,16 +5363,17 @@ Lino.products.Products.GridPanel = Ext.extend(Lino.GridPanel,{
     this.ls_detail_handler = Lino.products.Products.detail;
     this.ls_insert_handler = Lino.products.Products.insert;
     var ww = this.containing_window;
-    var manufacturer68 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer..." });
-    var name69 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id70 = new Ext.form.NumberField({ "selectOnFocus": true });
-    var model_number71 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var line72 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var production_begin73 = new Lino.DateField({ "selectOnFocus": true, "allowBlank": false });
-    var supported74 = new Ext.form.Checkbox({ "selectOnFocus": true, "checked": true });
+    var manufacturer1 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/Products/manufacturer", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Manufacturer..." });
+    var name2 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var line3 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id4 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var prodtype5 = new Lino.ChoicesFieldElement({ "selectOnFocus": true, "store": [ [ "pc", "Computer" ], [ "care", "Service Care" ], [ "periph", "Peripherals" ], [ "storage", "Storage" ], [ "comp", "Components" ], [ "network", "Networking" ], [ "software", "Software" ], [ "communication", "Communication" ] ], "allowBlank": false, "value": "pc" });
+    var model_number6 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var production_begin7 = new Lino.DateField({ "selectOnFocus": true, "allowBlank": false });
+    var supported8 = new Ext.form.Checkbox({ "selectOnFocus": true, "checked": true });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Manufacturer", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "dataIndex": "manufacturer", "editor": manufacturer68 }, { "colIndex": 1, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name69 }, new Lino.NullNumberColumn({ "colIndex": 2, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id70, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 3, "sortable": true, "header": "model number", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "model_number", "hidden": true, "editor": model_number71 }, { "colIndex": 4, "sortable": true, "header": "line", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "line", "hidden": true, "editor": line72 }, { "colIndex": 5, "sortable": true, "xtype": "datecolumn", "format": "d.m.Y", "editable": true, "filter": { "type": "date", "dateFormat": "d.m.Y" }, "header": "production begin", "dataIndex": "production_begin", "hidden": true, "width": Lino.chars2width(14), "editor": production_begin73 }, { "colIndex": 6, "sortable": false, "xtype": "checkcolumn", "header": "supported", "editable": true, "filter": { "type": "boolean" }, "width": Lino.chars2width(11), "dataIndex": "supported", "hidden": true } ];
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Manufacturer", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "dataIndex": "manufacturer", "editor": manufacturer1 }, { "colIndex": 1, "sortable": true, "header": "Name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name2 }, { "colIndex": 2, "sortable": true, "header": "Product Line", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "line", "editor": line3 }, new Lino.NullNumberColumn({ "colIndex": 3, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id4, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 4, "sortable": true, "header": "Product Type", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "dataIndex": "prodtype", "hidden": true, "editor": prodtype5 }, { "colIndex": 5, "sortable": true, "header": "Model Number", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "model_number", "hidden": true, "editor": model_number6 }, { "colIndex": 6, "sortable": true, "xtype": "datecolumn", "format": "d.m.Y", "editable": true, "filter": { "type": "date", "dateFormat": "d.m.Y" }, "header": "Production begin / Release", "dataIndex": "production_begin", "hidden": true, "width": Lino.chars2width(14), "editor": production_begin7 }, { "colIndex": 7, "sortable": false, "xtype": "checkcolumn", "header": "Still supported by manufacturer", "editable": true, "filter": { "type": "boolean" }, "width": Lino.chars2width(11), "dataIndex": "supported", "hidden": true } ];
     Lino.products.Products.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5386,7 +5396,7 @@ Lino.products.Products.post = function(rp,pk) {
 Lino.products.Products.insertPanel = Ext.extend(Lino.products.Products.InsertFormPanel,{
   empty_title: "New Products",
   hide_navigator: true,
-  ls_bbar_actions: [  ],
+  ls_bbar_actions: [ { "itemId": "post", "menu_item_text": "Create", "tooltip": "Create the record and open a detail window on it", "panel_btn_handler": function(panel){panel.save(null,true,'post')}, "text": "Create", "overflowText": "Create", "auto_save": false }, { "itemId": "poststay", "menu_item_text": "Create without detail", "tooltip": "Don't open a detail window on the new record", "panel_btn_handler": function(panel){panel.save(null,false,'poststay')}, "text": "Create without detail", "overflowText": "Create without detail", "auto_save": false } ],
   ls_url: "/products/Products",
   action_name: "insert",
   initComponent : function() {
@@ -5410,7 +5420,7 @@ Lino.products.Products.poststay = function(rp,pk) {
 
 Lino.products.Products.detailPanel = Ext.extend(Lino.products.Products.DetailFormPanel,{
   empty_title: "Detail Products",
-  ls_bbar_actions: [  ],
+  ls_bbar_actions: [ { "itemId": "put", "menu_item_text": "Save", "tooltip": "Save changes in this form", "panel_btn_handler": function(panel){panel.save(null,false,'put')}, "iconCls": "x-tbar-disk", "overflowText": "Save", "auto_save": false } ],
   ls_url: "/products/Products",
   action_name: "detail",
   initComponent : function() {
@@ -5433,26 +5443,27 @@ Lino.products.Products.grid = new Lino.WindowAction({  },function(){
 Lino.products.ProductSpecs.GridPanel = Ext.extend(Lino.GridPanel,{
   viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
   ls_url : "/products/ProductSpecs",
-  ls_bbar_actions : [  ],
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
   cell_edit : true,
   title : "Product specifications",
   gc_name : 0,
   stripeRows : true,
-  disabled_actions_index : 6,
-  ls_store_fields : [ { "type": "int", "name": "id" }, { "name": "product" }, 'productHidden', { "name": "specification" }, { "name": "specification_value" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  disabled_actions_index : 7,
+  ls_store_fields : [ { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "product" }, 'productHidden', { "name": "specification" }, { "name": "specification_value" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
   pk_index : 0,
   ls_grid_configs : [  ],
   ls_id_property : "id",
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var id76 = new Ext.form.NumberField({ "selectOnFocus": true });
-    var product77 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/ProductSpecs/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
-    var specification78 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var specification_value79 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id87 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno88 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var product89 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/ProductSpecs/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
+    var specification90 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var specification_value91 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id76, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 1, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "editor": product77, "dataIndex": "product" }, { "colIndex": 2, "sortable": true, "header": "specification", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification", "editor": specification78 }, { "colIndex": 3, "sortable": true, "header": "specification value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification_value", "editor": specification_value79 } ];
+    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id87, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "width": Lino.chars2width(6), "editor": seqno88 }), { "colIndex": 2, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "editor": product89, "dataIndex": "product" }, { "colIndex": 3, "sortable": true, "header": "Specification", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification", "editor": specification90 }, { "colIndex": 4, "sortable": true, "header": "Value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification_value", "editor": specification_value91 } ];
     Lino.products.ProductSpecs.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5471,35 +5482,57 @@ Lino.products.ProductSpecs.post = function(rp,pk) {
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
+Lino.products.ProductSpecs.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductSpecs","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
 Lino.products.ProductSpecs.grid = new Lino.WindowAction({  },function(){
   var p = { "is_main_window": true };
   return new Lino.products.ProductSpecs.GridPanel(p);
 });
+Lino.products.ProductSpecs.move_up = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductSpecs","GET",pk,"move_up",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ProductSpecs.move_down = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductSpecs","GET",pk,"move_down",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
 
 // js_render_GridPanel_class products.ProductOptions
 Lino.products.ProductOptions.GridPanel = Ext.extend(Lino.GridPanel,{
   viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
   ls_url : "/products/ProductOptions",
-  ls_bbar_actions : [  ],
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
   cell_edit : true,
   title : "Product options",
   gc_name : 0,
   stripeRows : true,
-  disabled_actions_index : 6,
-  ls_store_fields : [ { "type": "int", "name": "id" }, { "name": "product" }, 'productHidden', { "name": "option" }, { "name": "option_value" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  disabled_actions_index : 7,
+  ls_store_fields : [ { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "product" }, 'productHidden', { "name": "option" }, { "name": "option_value" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
   pk_index : 0,
   ls_grid_configs : [  ],
   ls_id_property : "id",
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var id81 = new Ext.form.NumberField({ "selectOnFocus": true });
-    var product82 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/ProductOptions/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
-    var option83 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var option_value84 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id93 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno94 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var product95 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/ProductOptions/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
+    var option96 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var option_value97 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id81, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 1, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "editor": product82, "dataIndex": "product" }, { "colIndex": 2, "sortable": true, "header": "option", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option", "editor": option83 }, { "colIndex": 3, "sortable": true, "header": "option value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option_value", "editor": option_value84 } ];
+    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id93, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "width": Lino.chars2width(6), "editor": seqno94 }), { "colIndex": 2, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "editor": product95, "dataIndex": "product" }, { "colIndex": 3, "sortable": true, "header": "Option", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option", "editor": option96 }, { "colIndex": 4, "sortable": true, "header": "Value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option_value", "editor": option_value97 } ];
     Lino.products.ProductOptions.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5518,104 +5551,101 @@ Lino.products.ProductOptions.post = function(rp,pk) {
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
+Lino.products.ProductOptions.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductOptions","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
 Lino.products.ProductOptions.grid = new Lino.WindowAction({  },function(){
   var p = { "is_main_window": true };
   return new Lino.products.ProductOptions.GridPanel(p);
 });
+Lino.products.ProductOptions.move_up = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductOptions","GET",pk,"move_up",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ProductOptions.move_down = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductOptions","GET",pk,"move_down",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
 
-// js_render_GridPanel_class products.OptionsByProduct
-Lino.products.OptionsByProduct.GridPanel = Ext.extend(Lino.GridPanel,{
+// js_render_GridPanel_class products.ProductImages
+Lino.products.ProductImages.GridPanel = Ext.extend(Lino.GridPanel,{
   viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
-  ls_url : "/products/OptionsByProduct",
-  ls_bbar_actions : [  ],
+  ls_url : "/products/ProductImages",
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
   cell_edit : true,
-  title : "Product options",
+  title : "Product Images",
   gc_name : 0,
   stripeRows : true,
-  disabled_actions_index : 6,
-  ls_store_fields : [ { "name": "option" }, { "name": "option_value" }, { "type": "int", "name": "id" }, { "name": "product" }, 'productHidden', { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
-  pk_index : 2,
+  disabled_actions_index : 8,
+  ls_store_fields : [ { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "file" }, { "name": "mimetype" }, { "name": "product" }, 'productHidden', { "type": "boolean", "name": "default_image" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  pk_index : 0,
   ls_grid_configs : [  ],
   ls_id_property : "id",
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var option21 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var option_value22 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id23 = new Ext.form.NumberField({ "selectOnFocus": true });
-    var product24 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/OptionsByProduct/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
+    var id99 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno100 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var file101 = Lino.file_field_handler(this,{ "selectOnFocus": true, "allowBlank": false, "maxLength": 100 });
+    var mimetype102 = new Ext.form.TextField({ "disabled": true, "maxLength": 64 });
+    var product103 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/ProductImages/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
+    var default_image104 = new Ext.form.Checkbox({ "selectOnFocus": true, "checked": false });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "option", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option", "editor": option21 }, { "colIndex": 1, "sortable": true, "header": "option value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "option_value", "editor": option_value22 }, new Lino.NullNumberColumn({ "colIndex": 2, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id23, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 3, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "hidden": true, "editor": product24, "dataIndex": "product" } ];
-    Lino.products.OptionsByProduct.GridPanel.superclass.initComponent.call(this);
+    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id99, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "width": Lino.chars2width(6), "editor": seqno100 }), { "colIndex": 2, "sortable": true, "header": "File", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "file", "editor": file101 }, { "filter": { "type": "string" }, "width": Lino.chars2width(22), "colIndex": 3, "sortable": true, "dataIndex": "mimetype", "header": "MIME type", "editable": false }, { "colIndex": 4, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "editor": product103, "dataIndex": "product" }, { "colIndex": 5, "sortable": false, "xtype": "checkcolumn", "header": "default image", "editable": true, "filter": { "type": "boolean" }, "width": Lino.chars2width(11), "dataIndex": "default_image" } ];
+    Lino.products.ProductImages.GridPanel.superclass.initComponent.call(this);
   }
 });
 
-Lino.products.OptionsByProduct.put = function(rp,pk) { 
+Lino.products.ProductImages.put = function(rp,pk) { 
   var h = function() { 
-    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"put",null);
+    Lino.run_row_action(rp,"/products/ProductImages","GET",pk,"put",null);
   };
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
-Lino.products.OptionsByProduct.post = function(rp,pk) { 
+Lino.products.ProductImages.post = function(rp,pk) { 
   var h = function() { 
-    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"post",null);
+    Lino.run_row_action(rp,"/products/ProductImages","GET",pk,"post",null);
   };
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
-Lino.products.OptionsByProduct.grid = new Lino.WindowAction({  },function(){
+Lino.products.ProductImages.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ProductImages","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ProductImages.grid = new Lino.WindowAction({  },function(){
   var p = { "is_main_window": true };
-  return new Lino.products.OptionsByProduct.GridPanel(p);
+  return new Lino.products.ProductImages.GridPanel(p);
 });
-
-// js_render_GridPanel_class products.SpecsByProduct
-Lino.products.SpecsByProduct.GridPanel = Ext.extend(Lino.GridPanel,{
-  viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
-  ls_url : "/products/SpecsByProduct",
-  ls_bbar_actions : [  ],
-  cell_edit : true,
-  title : "Product specifications",
-  gc_name : 0,
-  stripeRows : true,
-  disabled_actions_index : 6,
-  ls_store_fields : [ { "name": "specification" }, { "name": "specification_value" }, { "type": "int", "name": "id" }, { "name": "product" }, 'productHidden', { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
-  pk_index : 2,
-  ls_grid_configs : [  ],
-  ls_id_property : "id",
-  page_length : 20,
-  initComponent : function() {
-    var ww = this.containing_window;
-    var specification15 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var specification_value16 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id17 = new Ext.form.NumberField({ "selectOnFocus": true });
-    var product18 = new Lino.RemoteComboFieldElement({ "selectOnFocus": true, "store": new Lino.ComplexRemoteComboStore({ "proxy": new Ext.data.HttpProxy({ "url": "/choices/products/SpecsByProduct/product", "method": "GET" }) }), "allowBlank": false, "pageSize": 20, "emptyText": "Select a Product..." });
-    this.before_row_edit = function(record) {
-    };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "specification", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification", "editor": specification15 }, { "colIndex": 1, "sortable": true, "header": "specification value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "specification_value", "editor": specification_value16 }, new Lino.NullNumberColumn({ "colIndex": 2, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id17, "width": Lino.chars2width(6), "dataIndex": "id" }), { "colIndex": 3, "sortable": true, "header": "Product", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "renderer": Lino.fk_renderer('productHidden','Lino.products.Products.detail'), "hidden": true, "editor": product18, "dataIndex": "product" } ];
-    Lino.products.SpecsByProduct.GridPanel.superclass.initComponent.call(this);
-  }
-});
-
-Lino.products.SpecsByProduct.put = function(rp,pk) { 
+Lino.products.ProductImages.move_up = function(rp,pk) { 
   var h = function() { 
-    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"put",null);
+    Lino.run_row_action(rp,"/products/ProductImages","GET",pk,"move_up",null);
   };
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
-Lino.products.SpecsByProduct.post = function(rp,pk) { 
+Lino.products.ProductImages.move_down = function(rp,pk) { 
   var h = function() { 
-    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"post",null);
+    Lino.run_row_action(rp,"/products/ProductImages","GET",pk,"move_down",null);
   };
   var panel = Ext.getCmp(rp);
   panel.do_when_clean(true,h);
 };
-Lino.products.SpecsByProduct.grid = new Lino.WindowAction({  },function(){
-  var p = { "is_main_window": true };
-  return new Lino.products.SpecsByProduct.GridPanel(p);
-});
 
 // js_render_GridPanel_class support.Customers
 Lino.support.Customers.GridPanel = Ext.extend(Lino.GridPanel,{
@@ -5634,11 +5664,11 @@ Lino.support.Customers.GridPanel = Ext.extend(Lino.GridPanel,{
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var name86 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id87 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var name106 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id107 = new Ext.form.NumberField({ "selectOnFocus": true });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name86 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id87, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name106 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id107, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
     Lino.support.Customers.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5679,11 +5709,11 @@ Lino.support.Support_Items.GridPanel = Ext.extend(Lino.GridPanel,{
   page_length : 20,
   initComponent : function() {
     var ww = this.containing_window;
-    var name89 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
-    var id90 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var name109 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var id110 = new Ext.form.NumberField({ "selectOnFocus": true });
     this.before_row_edit = function(record) {
     };
-    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name89 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id90, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "name", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "name", "editor": name109 }, new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id110, "width": Lino.chars2width(6), "dataIndex": "id" }) ];
     Lino.support.Support_Items.GridPanel.superclass.initComponent.call(this);
   }
 });
@@ -5707,6 +5737,213 @@ Lino.support.Support_Items.grid = new Lino.WindowAction({  },function(){
   return new Lino.support.Support_Items.GridPanel(p);
 });
 
+// js_render_GridPanel_class products.SpecsByProduct
+Lino.products.SpecsByProduct.GridPanel = Ext.extend(Lino.GridPanel,{
+  viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
+  ls_url : "/products/SpecsByProduct",
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
+  cell_edit : true,
+  title : "Product specifications",
+  gc_name : 0,
+  stripeRows : true,
+  disabled_actions_index : 6,
+  ls_store_fields : [ { "name": "specification" }, { "name": "specification_value" }, { "name": "move_buttons" }, { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  pk_index : 3,
+  ls_grid_configs : [  ],
+  ls_id_property : "id",
+  page_length : 20,
+  initComponent : function() {
+    var ww = this.containing_window;
+    var specification29 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var specification_value30 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var move_buttons_disp31 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var id32 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno33 = new Ext.form.NumberField({ "selectOnFocus": true });
+    this.before_row_edit = function(record) {
+    };
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Specification", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "dataIndex": "specification", "editor": specification29 }, { "colIndex": 1, "sortable": true, "header": "Value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(81), "dataIndex": "specification_value", "editor": specification_value30 }, { "width": Lino.chars2width(31), "colIndex": 2, "sortable": false, "dataIndex": "move_buttons", "header": "Move", "editable": false }, new Lino.NullNumberColumn({ "colIndex": 3, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id32, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 4, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "hidden": true, "width": Lino.chars2width(6), "editor": seqno33 }) ];
+    Lino.products.SpecsByProduct.GridPanel.superclass.initComponent.call(this);
+  }
+});
+
+Lino.products.SpecsByProduct.put = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"put",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.SpecsByProduct.post = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"post",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.SpecsByProduct.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.SpecsByProduct.grid = new Lino.WindowAction({  },function(){
+  var p = { "is_main_window": true };
+  return new Lino.products.SpecsByProduct.GridPanel(p);
+});
+Lino.products.SpecsByProduct.move_up = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"move_up",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.SpecsByProduct.move_down = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/SpecsByProduct","GET",pk,"move_down",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+
+// js_render_GridPanel_class products.OptionsByProduct
+Lino.products.OptionsByProduct.GridPanel = Ext.extend(Lino.GridPanel,{
+  viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
+  ls_url : "/products/OptionsByProduct",
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
+  cell_edit : true,
+  title : "Product options",
+  gc_name : 0,
+  stripeRows : true,
+  disabled_actions_index : 6,
+  ls_store_fields : [ { "name": "option" }, { "name": "option_value" }, { "name": "move_buttons" }, { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  pk_index : 3,
+  ls_grid_configs : [  ],
+  ls_id_property : "id",
+  page_length : 20,
+  initComponent : function() {
+    var ww = this.containing_window;
+    var option36 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var option_value37 = new Ext.form.TextField({ "selectOnFocus": true, "allowBlank": false, "maxLength": 200 });
+    var move_buttons_disp38 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var id39 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno40 = new Ext.form.NumberField({ "selectOnFocus": true });
+    this.before_row_edit = function(record) {
+    };
+    this.ls_columns = [ { "colIndex": 0, "sortable": true, "header": "Option", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(21), "dataIndex": "option", "editor": option36 }, { "colIndex": 1, "sortable": true, "header": "Value", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(81), "dataIndex": "option_value", "editor": option_value37 }, { "width": Lino.chars2width(31), "colIndex": 2, "sortable": false, "dataIndex": "move_buttons", "header": "Move", "editable": false }, new Lino.NullNumberColumn({ "colIndex": 3, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "hidden": true, "editor": id39, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 4, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "hidden": true, "width": Lino.chars2width(6), "editor": seqno40 }) ];
+    Lino.products.OptionsByProduct.GridPanel.superclass.initComponent.call(this);
+  }
+});
+
+Lino.products.OptionsByProduct.put = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"put",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.OptionsByProduct.post = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"post",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.OptionsByProduct.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.OptionsByProduct.grid = new Lino.WindowAction({  },function(){
+  var p = { "is_main_window": true };
+  return new Lino.products.OptionsByProduct.GridPanel(p);
+});
+Lino.products.OptionsByProduct.move_up = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"move_up",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.OptionsByProduct.move_down = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/OptionsByProduct","GET",pk,"move_down",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+
+// js_render_GridPanel_class products.ImagesByProduct
+Lino.products.ImagesByProduct.GridPanel = Ext.extend(Lino.GridPanel,{
+  viewConfig : { "getRowClass": Lino.getRowClass, "emptyText": "No data to display." },
+  ls_url : "/products/ImagesByProduct",
+  ls_bbar_actions : [ { "itemId": "duplicate", "menu_item_text": "Duplicate", "must_save": true, "tooltip": "Duplicate", "panel_btn_handler": Lino.row_action_handler('duplicate','GET',null), "iconCls": "x-tbar-arrow_divide", "overflowText": "Duplicate", "auto_save": true }, { "itemId": "move_up", "menu_item_text": "Up", "must_save": true, "tooltip": "Move this row one row upwards", "panel_btn_handler": Lino.row_action_handler('move_up','GET',null), "iconCls": "x-tbar-arrow_up", "overflowText": "Up", "auto_save": true }, { "itemId": "move_down", "menu_item_text": "Down", "must_save": true, "tooltip": "Move this row one row downwards", "panel_btn_handler": Lino.row_action_handler('move_down','GET',null), "iconCls": "x-tbar-arrow_down", "overflowText": "Down", "auto_save": true } ],
+  cell_edit : true,
+  title : "Product Images",
+  gc_name : 0,
+  stripeRows : true,
+  disabled_actions_index : 6,
+  ls_store_fields : [ { "type": "int", "name": "id" }, { "type": "int", "name": "seqno" }, { "name": "file" }, { "name": "mimetype" }, { "type": "boolean", "name": "default_image" }, { "name": "disabled_fields" }, { "name": "disabled_actions" }, { "name": "disable_editing" } ],
+  pk_index : 0,
+  ls_grid_configs : [  ],
+  ls_id_property : "id",
+  page_length : 20,
+  initComponent : function() {
+    var ww = this.containing_window;
+    var id112 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var seqno113 = new Ext.form.NumberField({ "selectOnFocus": true });
+    var file114 = Lino.file_field_handler(this,{ "selectOnFocus": true, "allowBlank": false, "maxLength": 100 });
+    var mimetype115 = new Ext.form.TextField({ "disabled": true, "maxLength": 64 });
+    var default_image116 = new Ext.form.Checkbox({ "selectOnFocus": true, "checked": false });
+    this.before_row_edit = function(record) {
+    };
+    this.ls_columns = [ new Lino.NullNumberColumn({ "colIndex": 0, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "ID", "renderer": Lino.id_renderer, "editor": id112, "width": Lino.chars2width(6), "dataIndex": "id" }), new Lino.NullNumberColumn({ "colIndex": 1, "sortable": true, "format": "0", "editable": true, "filter": { "type": "numeric" }, "header": "Seq.No.", "dataIndex": "seqno", "width": Lino.chars2width(6), "editor": seqno113 }), { "colIndex": 2, "sortable": true, "header": "File", "editable": true, "filter": { "type": "string" }, "width": Lino.chars2width(22), "dataIndex": "file", "editor": file114 }, { "filter": { "type": "string" }, "width": Lino.chars2width(22), "colIndex": 3, "sortable": true, "dataIndex": "mimetype", "header": "MIME type", "editable": false }, { "colIndex": 4, "sortable": false, "xtype": "checkcolumn", "header": "default image", "editable": true, "filter": { "type": "boolean" }, "width": Lino.chars2width(11), "dataIndex": "default_image" } ];
+    Lino.products.ImagesByProduct.GridPanel.superclass.initComponent.call(this);
+  }
+});
+
+Lino.products.ImagesByProduct.put = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ImagesByProduct","GET",pk,"put",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ImagesByProduct.post = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ImagesByProduct","GET",pk,"post",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ImagesByProduct.duplicate = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ImagesByProduct","GET",pk,"duplicate",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ImagesByProduct.grid = new Lino.WindowAction({  },function(){
+  var p = { "is_main_window": true };
+  return new Lino.products.ImagesByProduct.GridPanel(p);
+});
+Lino.products.ImagesByProduct.move_up = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ImagesByProduct","GET",pk,"move_up",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+Lino.products.ImagesByProduct.move_down = function(rp,pk) { 
+  var h = function() { 
+    Lino.run_row_action(rp,"/products/ImagesByProduct","GET",pk,"move_down",null);
+  };
+  var panel = Ext.getCmp(rp);
+  panel.do_when_clean(true,h);
+};
+
 // js_render_GridPanel_class about.Models
 Lino.about.Models.GridPanel = Ext.extend(Lino.GridPanel,{
   ls_url : "/about/Models",
@@ -5724,11 +5961,11 @@ Lino.about.Models.GridPanel = Ext.extend(Lino.GridPanel,{
   initComponent : function() {
     this.ls_detail_handler = Lino.about.Models.detail;
     var ww = this.containing_window;
-    var app_disp92 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var name_disp93 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var docstring_disp94 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var rows95 = new Ext.form.NumberField({ "disabled": true });
-    var detail_action_disp96 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var app_disp118 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var name_disp119 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var docstring_disp120 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var rows121 = new Ext.form.NumberField({ "disabled": true });
+    var detail_action_disp122 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(31), "colIndex": 0, "sortable": false, "dataIndex": "app", "header": "app_label", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 1, "sortable": false, "dataIndex": "name", "header": "name", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 2, "sortable": false, "dataIndex": "docstring", "header": "docstring", "editable": false }, new Lino.NullNumberColumn({ "header": "Rows", "colIndex": 3, "sortable": false, "dataIndex": "rows", "format": "0", "editable": false, "width": Lino.chars2width(6) }), { "width": Lino.chars2width(31), "colIndex": 4, "sortable": false, "dataIndex": "detail_action", "header": "detail_action", "editable": false } ];
@@ -5773,9 +6010,9 @@ Lino.about.FieldsByModel.GridPanel = Ext.extend(Lino.GridPanel,{
   disable_editing : true,
   initComponent : function() {
     var ww = this.containing_window;
-    var name_disp50 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var verbose_name_disp51 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var help_text_column_disp52 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var name_disp69 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var verbose_name_disp70 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var help_text_column_disp71 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(31), "colIndex": 0, "sortable": false, "dataIndex": "name", "header": "name", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 1, "sortable": false, "dataIndex": "verbose_name", "header": "verbose name", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 2, "sortable": false, "dataIndex": "help_text_column", "header": "help text", "editable": false } ];
@@ -5804,9 +6041,9 @@ Lino.about.SourceFiles.GridPanel = Ext.extend(Lino.GridPanel,{
   disable_editing : true,
   initComponent : function() {
     var ww = this.containing_window;
-    var module_name98 = new Ext.form.TextField({ "disabled": true, "maxLength": null });
-    var code_lines99 = new Ext.form.NumberField({ "disabled": true });
-    var doc_lines100 = new Ext.form.NumberField({ "disabled": true });
+    var module_name124 = new Ext.form.TextField({ "disabled": true, "maxLength": null });
+    var code_lines125 = new Ext.form.NumberField({ "disabled": true });
+    var doc_lines126 = new Ext.form.NumberField({ "disabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(5), "colIndex": 0, "sortable": false, "dataIndex": "module_name", "header": "module name", "editable": false }, new Lino.NullNumberColumn({ "header": "Code", "colIndex": 1, "sortable": false, "dataIndex": "code_lines", "format": "0", "editable": false, "width": Lino.chars2width(6) }), new Lino.NullNumberColumn({ "header": "doc", "colIndex": 2, "sortable": false, "dataIndex": "doc_lines", "format": "0", "editable": false, "width": Lino.chars2width(6) }) ];
@@ -5899,11 +6136,11 @@ Lino.lino.BuildMethods.GridPanel = Ext.extend(Lino.GridPanel,{
   disable_editing : true,
   initComponent : function() {
     var ww = this.containing_window;
-    var value102 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var name103 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var text104 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
-    var remark_disp105 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var workflow_buttons_disp106 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var value128 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var name129 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var text130 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
+    var remark_disp131 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var workflow_buttons_disp132 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(22), "colIndex": 0, "sortable": false, "dataIndex": "value", "header": "value", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 1, "sortable": false, "dataIndex": "name", "header": "name", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 2, "sortable": false, "dataIndex": "text", "header": "text", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 3, "sortable": false, "dataIndex": "remark", "header": "Remark", "hidden": true, "editable": false }, { "width": Lino.chars2width(31), "colIndex": 4, "sortable": false, "dataIndex": "workflow_buttons", "header": "Workflow", "hidden": true, "editable": false } ];
@@ -5932,11 +6169,11 @@ Lino.lino.YesNo.GridPanel = Ext.extend(Lino.GridPanel,{
   disable_editing : true,
   initComponent : function() {
     var ww = this.containing_window;
-    var value108 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var name109 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var text110 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
-    var remark_disp111 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var workflow_buttons_disp112 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var value134 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var name135 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var text136 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
+    var remark_disp137 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var workflow_buttons_disp138 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(22), "colIndex": 0, "sortable": false, "dataIndex": "value", "header": "value", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 1, "sortable": false, "dataIndex": "name", "header": "name", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 2, "sortable": false, "dataIndex": "text", "header": "text", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 3, "sortable": false, "dataIndex": "remark", "header": "Remark", "hidden": true, "editable": false }, { "width": Lino.chars2width(31), "colIndex": 4, "sortable": false, "dataIndex": "workflow_buttons", "header": "Workflow", "hidden": true, "editable": false } ];
@@ -5965,11 +6202,11 @@ Lino.lino.Genders.GridPanel = Ext.extend(Lino.GridPanel,{
   disable_editing : true,
   initComponent : function() {
     var ww = this.containing_window;
-    var value114 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var name115 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
-    var text116 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
-    var remark_disp117 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
-    var workflow_buttons_disp118 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var value140 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var name141 = new Ext.form.TextField({ "disabled": true, "maxLength": 20 });
+    var text142 = new Ext.form.TextField({ "disabled": true, "maxLength": 50 });
+    var remark_disp143 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
+    var workflow_buttons_disp144 = new Ext.form.DisplayField({ "disabled": true, "value": "<br/>", "always_enabled": true });
     this.before_row_edit = function(record) {
     };
     this.ls_columns = [ { "width": Lino.chars2width(22), "colIndex": 0, "sortable": false, "dataIndex": "value", "header": "value", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 1, "sortable": false, "dataIndex": "name", "header": "name", "editable": false }, { "width": Lino.chars2width(22), "colIndex": 2, "sortable": false, "dataIndex": "text", "header": "text", "editable": false }, { "width": Lino.chars2width(31), "colIndex": 3, "sortable": false, "dataIndex": "remark", "header": "Remark", "hidden": true, "editable": false }, { "width": Lino.chars2width(31), "colIndex": 4, "sortable": false, "dataIndex": "workflow_buttons", "header": "Workflow", "hidden": true, "editable": false } ];
